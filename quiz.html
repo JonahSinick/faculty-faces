@@ -57,11 +57,17 @@ body {
 }
 .gender-tag.men { background: #e3f2fd; color: #1565c0; }
 .gender-tag.women { background: #fce4ec; color: #c62828; }
+.question-block {
+    text-align: center; margin-top: 18px;
+}
 .prompt-line {
     font-size: 17px; color: #444; margin-bottom: 6px; text-align: center;
 }
 .ask-line {
-    font-size: 22px; font-weight: 700; margin-bottom: 20px; text-align: center;
+    font-size: 22px; font-weight: 700; text-align: center;
+}
+.next-btn {
+    display: none; margin-top: 12px; padding: 12px 48px; font-size: 16px;
 }
 
 .images-row {
@@ -173,9 +179,6 @@ body {
         <span class="score-label" id="score-label">0 correct</span>
     </div>
     <div class="question-area">
-        <span class="gender-tag men" id="gender-tag">Men</span>
-        <div class="prompt-line" id="prompt-line"></div>
-        <div class="ask-line" id="ask-line"></div>
         <div class="images-row">
             <div class="img-card" id="left-card" onclick="guess('left')">
                 <img id="left-img">
@@ -186,9 +189,15 @@ body {
                 <div class="reveal-label" id="right-label"></div>
             </div>
         </div>
+        <div class="question-block">
+            <span class="gender-tag men" id="gender-tag">Men</span>
+            <div class="prompt-line" id="prompt-line"></div>
+            <div class="ask-line" id="ask-line"></div>
+        </div>
         <div class="feedback-area">
             <div class="feedback-text" id="feedback-text"></div>
             <div class="stats-text" id="stats-text"></div>
+            <button class="btn next-btn" id="next-btn" onclick="nextRound()">Next</button>
         </div>
     </div>
 </div>
@@ -271,6 +280,7 @@ function showRound() {
     document.getElementById('feedback-text').textContent = '';
     document.getElementById('feedback-text').className = 'feedback-text';
     document.getElementById('stats-text').textContent = '';
+    document.getElementById('next-btn').style.display = 'none';
 
     // Store metadata for history
     QUIZ_DATA[round]._asked = askedField;
@@ -320,8 +330,16 @@ function guess(side) {
     // Update score immediately
     document.getElementById('score-label').textContent = score + ' correct';
 
+    // Show Next button
+    const nb = document.getElementById('next-btn');
+    nb.style.display = 'inline-block';
+    nb.textContent = (round + 1 < N_ROUNDS) ? 'Next' : 'See Results';
+
     round++;
-    setTimeout(showRound, 2500);
+}
+
+function nextRound() {
+    showRound();
 }
 
 function showResults() {
