@@ -49,14 +49,8 @@ body {
 
 .question-area {
     flex: 1; display: flex; flex-direction: column; align-items: center;
-    justify-content: center; padding: 24px 20px; width: 100%; max-width: 700px;
+    justify-content: flex-start; padding: 16px 20px; width: 100%; max-width: 700px;
 }
-.gender-tag {
-    display: inline-block; font-size: 12px; font-weight: 700;
-    padding: 3px 10px; border-radius: 4px; margin-bottom: 10px;
-}
-.gender-tag.men { background: #e3f2fd; color: #1565c0; }
-.gender-tag.women { background: #fce4ec; color: #c62828; }
 .prompt-line {
     font-size: 20px; color: #444; margin-bottom: 6px; text-align: center;
 }
@@ -176,7 +170,6 @@ body {
         <span class="score-label" id="score-label">0 correct</span>
     </div>
     <div class="question-area">
-        <span class="gender-tag men" id="gender-tag">Men</span>
         <div class="prompt-line" id="prompt-line"></div>
         <div class="ask-line" id="ask-line"></div>
         <div class="images-row">
@@ -251,10 +244,6 @@ function showRound() {
     document.getElementById('progress-fill').style.width = ((round) / N_ROUNDS * 100) + '%';
     document.getElementById('round-label').textContent = (round + 1) + ' / ' + N_ROUNDS;
     document.getElementById('score-label').textContent = score + ' correct';
-
-    const gtag = document.getElementById('gender-tag');
-    gtag.textContent = item.gender;
-    gtag.className = 'gender-tag ' + (item.gender === 'Men' ? 'men' : 'women');
 
     document.getElementById('prompt-line').innerHTML =
         'One is <b>' + item.label_a + '</b>, the other is <b>' + item.label_b + '</b>';
@@ -363,8 +352,7 @@ function showResults() {
         const iconColor = h.correct ? '#4caf50' : '#f44336';
         bk += '<div class="bk-row">' +
             '<span class="bk-num">' + (i+1) + '</span>' +
-            '<span class="bk-pair">' + h.item.label_a + ' vs ' + h.item.label_b +
-            '<span class="bk-gender ' + gc + '">' + g + '</span></span>' +
+            '<span class="bk-pair">' + h.item.label_a + ' vs ' + h.item.label_b + '</span>' +
             '<span class="bk-result" style="color:' + iconColor + '">' + icon + '</span>' +
             '<span class="bk-auc">AUC ' + h.item.auc.toFixed(3) + '</span>' +
             '</div>';
