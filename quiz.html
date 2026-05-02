@@ -317,10 +317,17 @@ function guess(side) {
     // Show Next button
     const nb = document.getElementById('next-btn');
     nb.style.display = 'inline-block';
-    nb.textContent = (round + 1 < N_ROUNDS) ? 'Next' : 'See Results';
+    nb.textContent = (round + 1 < N_ROUNDS) ? 'Next (or press Space)' : 'See Results (or press Space)';
 
     round++;
 }
+
+document.addEventListener('keydown', function(e) {
+    if (e.code === 'Space' && locked && document.getElementById('next-btn').style.display === 'inline-block') {
+        e.preventDefault();
+        nextRound();
+    }
+});
 
 function nextRound() {
     showRound();
