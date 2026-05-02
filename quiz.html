@@ -57,14 +57,14 @@ body {
 }
 .gender-tag.men { background: #e3f2fd; color: #1565c0; }
 .gender-tag.women { background: #fce4ec; color: #c62828; }
-.question-block {
-    text-align: center; margin-top: 18px;
+.context-block {
+    text-align: center; margin-bottom: 16px;
 }
 .prompt-line {
-    font-size: 17px; color: #444; margin-bottom: 6px; text-align: center;
+    font-size: 17px; color: #444; margin-top: 4px; text-align: center;
 }
 .ask-line {
-    font-size: 22px; font-weight: 700; text-align: center;
+    font-size: 22px; font-weight: 700; text-align: center; margin-top: 18px;
 }
 .next-btn {
     display: none; margin-top: 12px; padding: 12px 48px; font-size: 16px;
@@ -179,6 +179,10 @@ body {
         <span class="score-label" id="score-label">0 correct</span>
     </div>
     <div class="question-area">
+        <div class="context-block">
+            <span class="gender-tag men" id="gender-tag">Men</span>
+            <div class="prompt-line" id="prompt-line"></div>
+        </div>
         <div class="images-row">
             <div class="img-card" id="left-card" onclick="guess('left')">
                 <img id="left-img">
@@ -189,11 +193,7 @@ body {
                 <div class="reveal-label" id="right-label"></div>
             </div>
         </div>
-        <div class="question-block">
-            <span class="gender-tag men" id="gender-tag">Men</span>
-            <div class="prompt-line" id="prompt-line"></div>
-            <div class="ask-line" id="ask-line"></div>
-        </div>
+        <div class="ask-line" id="ask-line"></div>
         <div class="feedback-area">
             <div class="feedback-text" id="feedback-text"></div>
             <div class="stats-text" id="stats-text"></div>
