@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<title>fWHR Contribution to Field Classification</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: -apple-system, system-ui, sans-serif;
+    max-width: 1200px; margin: 0 auto; padding: 20px 24px;
+    background: #fafafa; color: #222; line-height: 1.5;
+}
+h1 { text-align: center; margin-bottom: 6px; font-size: 22px; }
+.subtitle { text-align: center; color: #666; font-size: 13px; margin-bottom: 16px; }
+.summary {
+    background: white; padding: 14px 20px; border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px;
+    font-size: 14px; line-height: 1.7;
+}
+.summary b { color: #1a6fb5; }
+table {
+    width: 100%; border-collapse: collapse; background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); border-radius: 8px;
+    overflow: hidden; font-size: 13px;
+}
+th {
+    background: #f0f2f5; padding: 10px 6px; text-align: left;
+    font-weight: 700; font-size: 11px; color: #555;
+    border-bottom: 2px solid #ddd; position: sticky; top: 0;
+}
+th.group-header {
+    text-align: center; font-size: 13px; color: #333;
+    border-left: 2px solid #ddd;
+}
+th.men-header { color: #1a6fb5; }
+th.women-header { color: #9b59b6; }
+td { padding: 6px 6px; border-bottom: 1px solid #eee; }
+tr:hover { background: #f8f9fb; }
+.pair-col { font-weight: 500; white-space: nowrap; }
+.num-col { text-align: right; font-variant-numeric: tabular-nums; }
+.dim { color: #ccc; }
+.bar-col { width: 80px; }
+.frac-bar { height: 12px; border-radius: 2px; min-width: 2px; }
+td:nth-child(6), td:nth-child(10) { border-right: 2px solid #eee; }
+td:nth-child(2) { border-left: 2px solid #eee; }
+.legend {
+    display: flex; gap: 16px; justify-content: center; margin: 12px 0;
+    font-size: 12px; color: #666;
+}
+.legend span { display: flex; align-items: center; gap: 4px; }
+.legend .dot { width: 10px; height: 10px; border-radius: 2px; }
+@media print {
+    body { background: white; }
+    table { box-shadow: none; border: 1px solid #ddd; }
+    th { position: static; }
+}
+</style></head><body>
+
+<h1>How Much Does Face Width Explain?</h1>
+<div class="subtitle">
+    Fraction of full-model (ArcFace) classification power attributable to fWHR alone &middot; Grouped by field pair
+</div>
+
+<div class="summary">
+    <b>fWHR alone</b> explains a median of <b>59%</b> (mean 61%) of the excess AUC
+    that the full 512-dimensional ArcFace model achieves above chance.
+    Mean AUC: fWHR = 0.576, ArcFace = 0.627.
+    <br><br>
+    <b>Reading the &ldquo;%&rdquo; column:</b>
+    Values <b>&gt;100%</b> mean fWHR alone outperforms the full model &mdash;
+    the 512-dim representation adds noise when the true difference is almost entirely face width.
+    Values <b>&lt;0%</b> mean fWHR points the wrong direction for that pair.
+    <b>&mdash;</b> means that pair didn't meet the minimum sample size (200) for that gender.
+</div>
+
+<div class="legend">
+    <span><div class="dot" style="background:#2d7d46"></div> &ge;80%</span>
+    <span><div class="dot" style="background:#1a6fb5"></div> 50&ndash;79%</span>
+    <span><div class="dot" style="background:#b5891a"></div> 20&ndash;49%</span>
+    <span><div class="dot" style="background:#c0392b"></div> &lt;20%</span>
+</div>
+
+<table>
+<thead>
+<tr>
+    <th rowspan="2" style="vertical-align:bottom">Field Pair</th>
+    <th colspan="4" class="group-header men-header" style="border-left:2px solid #ddd">Men</th>
+    <th colspan="4" class="group-header women-header" style="border-left:2px solid #ddd">Women</th>
+    <th rowspan="2" style="vertical-align:bottom">Wider Field</th>
+</tr>
+<tr>
+    <th style="border-left:2px solid #ddd">ArcFace</th><th>fWHR</th><th>%</th><th></th>
+    <th style="border-left:2px solid #ddd">ArcFace</th><th>fWHR</th><th>%</th><th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="pair-col">Computer Science vs Nursing</td>
+<td class="num-col">0.739</td><td class="num-col">0.610</td><td class="num-col" style="color:#b5891a;font-weight:600">46%</td><td class="bar-col"><div class="frac-bar" style="width:46.126885019588144%;background:#b5891a"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Nursing</td>
+</tr>
+<tr>
+<td class="pair-col">Computer Science vs English</td>
+<td class="num-col">0.714</td><td class="num-col">0.605</td><td class="num-col" style="color:#b5891a;font-weight:600">49%</td><td class="bar-col"><div class="frac-bar" style="width:49.07956008096376%;background:#b5891a"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Computer Science</td>
+</tr>
+<tr>
+<td class="pair-col">Nursing vs Law</td>
+<td class="num-col">0.690</td><td class="num-col">0.643</td><td class="num-col" style="color:#1a6fb5;font-weight:600">75%</td><td class="bar-col"><div class="frac-bar" style="width:75.49019607843145%;background:#1a6fb5"></div></td>
+<td class="num-col">0.728</td><td class="num-col">0.599</td><td class="num-col" style="color:#b5891a;font-weight:600">43%</td><td class="bar-col"><div class="frac-bar" style="width:43.44728545873532%;background:#b5891a"></div></td>
+<td>Nursing</td>
+</tr>
+<tr>
+<td class="pair-col">Music vs Physics</td>
+<td class="num-col">0.730</td><td class="num-col">0.538</td><td class="num-col" style="color:#c0392b;font-weight:600">17%</td><td class="bar-col"><div class="frac-bar" style="width:16.527872786101746%;background:#c0392b"></div></td>
+<td class="num-col">0.684</td><td class="num-col">0.573</td><td class="num-col" style="color:#b5891a;font-weight:600">40%</td><td class="bar-col"><div class="frac-bar" style="width:39.94129681423095%;background:#b5891a"></div></td>
+<td>Physics</td>
+</tr>
+<tr>
+<td class="pair-col">Computer Science vs Music</td>
+<td class="num-col">0.702</td><td class="num-col">0.563</td><td class="num-col" style="color:#b5891a;font-weight:600">31%</td><td class="bar-col"><div class="frac-bar" style="width:31.300319991333275%;background:#b5891a"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Computer Science</td>
+</tr>
+<tr>
+<td class="pair-col">Music vs Nursing</td>
+<td class="num-col">0.669</td><td class="num-col">0.671</td><td class="num-col" style="color:#2d7d46;font-weight:600">101%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td class="num-col">0.726</td><td class="num-col">0.649</td><td class="num-col" style="color:#1a6fb5;font-weight:600">66%</td><td class="bar-col"><div class="frac-bar" style="width:66.06672896544625%;background:#1a6fb5"></div></td>
+<td>Nursing</td>
+</tr>
+<tr>
+<td class="pair-col">Nursing vs Physics</td>
+<td class="num-col">0.712</td><td class="num-col">0.644</td><td class="num-col" style="color:#1a6fb5;font-weight:600">68%</td><td class="bar-col"><div class="frac-bar" style="width:67.89959626180251%;background:#1a6fb5"></div></td>
+<td class="num-col">0.678</td><td class="num-col">0.570</td><td class="num-col" style="color:#b5891a;font-weight:600">39%</td><td class="bar-col"><div class="frac-bar" style="width:39.27471120589442%;background:#b5891a"></div></td>
+<td>Nursing</td>
+</tr>
+<tr>
+<td class="pair-col">Business vs Music</td>
+<td class="num-col">0.669</td><td class="num-col">0.628</td><td class="num-col" style="color:#1a6fb5;font-weight:600">76%</td><td class="bar-col"><div class="frac-bar" style="width:75.50174970862781%;background:#1a6fb5"></div></td>
+<td class="num-col">0.720</td><td class="num-col">0.624</td><td class="num-col" style="color:#1a6fb5;font-weight:600">56%</td><td class="bar-col"><div class="frac-bar" style="width:56.152042690212%;background:#1a6fb5"></div></td>
+<td>Business</td>
+</tr>
+<tr>
+<td class="pair-col">English vs Nursing</td>
+<td class="num-col">0.701</td><td class="num-col">0.706</td><td class="num-col" style="color:#2d7d46;font-weight:600">102%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td class="num-col">0.668</td><td class="num-col">0.698</td><td class="num-col" style="color:#2d7d46;font-weight:600">118%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td>Nursing</td>
+</tr>
+<tr>
+<td class="pair-col">Nursing vs Mathematics</td>
+<td class="num-col">0.670</td><td class="num-col">0.645</td><td class="num-col" style="color:#2d7d46;font-weight:600">85%</td><td class="bar-col"><div class="frac-bar" style="width:85.19974834853736%;background:#2d7d46"></div></td>
+<td class="num-col">0.690</td><td class="num-col">0.562</td><td class="num-col" style="color:#b5891a;font-weight:600">33%</td><td class="bar-col"><div class="frac-bar" style="width:32.691551145901336%;background:#b5891a"></div></td>
+<td>Nursing</td>
+</tr>
+<tr>
+<td class="pair-col">Economics vs Nursing</td>
+<td class="num-col">0.667</td><td class="num-col">0.618</td><td class="num-col" style="color:#1a6fb5;font-weight:600">71%</td><td class="bar-col"><div class="frac-bar" style="width:70.83964215421952%;background:#1a6fb5"></div></td>
+<td class="num-col">0.687</td><td class="num-col">0.584</td><td class="num-col" style="color:#b5891a;font-weight:600">45%</td><td class="bar-col"><div class="frac-bar" style="width:44.84665270771412%;background:#b5891a"></div></td>
+<td>Nursing</td>
+</tr>
+<tr>
+<td class="pair-col">Computer Science vs Art</td>
+<td class="num-col">0.674</td><td class="num-col">0.640</td><td class="num-col" style="color:#2d7d46;font-weight:600">80%</td><td class="bar-col"><div class="frac-bar" style="width:80.17292931876693%;background:#2d7d46"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Computer Science</td>
+</tr>
+<tr>
+<td class="pair-col">Business vs English</td>
+<td class="num-col">0.682</td><td class="num-col">0.667</td><td class="num-col" style="color:#2d7d46;font-weight:600">92%</td><td class="bar-col"><div class="frac-bar" style="width:91.87031603244976%;background:#2d7d46"></div></td>
+<td class="num-col">0.664</td><td class="num-col">0.675</td><td class="num-col" style="color:#2d7d46;font-weight:600">107%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td>Business</td>
+</tr>
+<tr>
+<td class="pair-col">Art vs Physics</td>
+<td class="num-col">0.702</td><td class="num-col">0.618</td><td class="num-col" style="color:#1a6fb5;font-weight:600">58%</td><td class="bar-col"><div class="frac-bar" style="width:58.427715950287194%;background:#1a6fb5"></div></td>
+<td class="num-col">0.639</td><td class="num-col">0.605</td><td class="num-col" style="color:#1a6fb5;font-weight:600">76%</td><td class="bar-col"><div class="frac-bar" style="width:75.69632367500493%;background:#1a6fb5"></div></td>
+<td>Physics</td>
+</tr>
+<tr>
+<td class="pair-col">English vs Physics</td>
+<td class="num-col">0.713</td><td class="num-col">0.582</td><td class="num-col" style="color:#b5891a;font-weight:600">38%</td><td class="bar-col"><div class="frac-bar" style="width:38.46327246697659%;background:#b5891a"></div></td>
+<td class="num-col">0.621</td><td class="num-col">0.622</td><td class="num-col" style="color:#2d7d46;font-weight:600">101%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td>Physics</td>
+</tr>
+<tr>
+<td class="pair-col">Engineering vs Physics</td>
+<td class="num-col">0.667</td><td class="num-col">0.561</td><td class="num-col" style="color:#b5891a;font-weight:600">36%</td><td class="bar-col"><div class="frac-bar" style="width:36.493697616691%;background:#b5891a"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Engineering</td>
+</tr>
+<tr>
+<td class="pair-col">Computer Science vs Engineering</td>
+<td class="num-col">0.666</td><td class="num-col">0.526</td><td class="num-col" style="color:#c0392b;font-weight:600">16%</td><td class="bar-col"><div class="frac-bar" style="width:15.696649737811057%;background:#c0392b"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Engineering</td>
+</tr>
+<tr>
+<td class="pair-col">Nursing vs History</td>
+<td class="num-col">0.660</td><td class="num-col">0.660</td><td class="num-col" style="color:#2d7d46;font-weight:600">100%</td><td class="bar-col"><div class="frac-bar" style="width:99.69096334185848%;background:#2d7d46"></div></td>
+<td class="num-col">0.671</td><td class="num-col">0.650</td><td class="num-col" style="color:#2d7d46;font-weight:600">88%</td><td class="bar-col"><div class="frac-bar" style="width:87.7347878539501%;background:#2d7d46"></div></td>
+<td>Nursing</td>
+</tr>
+<tr>
+<td class="pair-col">Music vs Law</td>
+<td class="num-col">0.659</td><td class="num-col">0.494</td><td class="num-col" style="color:#c0392b;font-weight:600">-3%</td><td class="bar-col"><div class="frac-bar" style="width:0%;background:#c0392b"></div></td>
+<td class="num-col">0.672</td><td class="num-col">0.542</td><td class="num-col" style="color:#b5891a;font-weight:600">24%</td><td class="bar-col"><div class="frac-bar" style="width:24.22480620155036%;background:#b5891a"></div></td>
+<td>Law</td>
+</tr>
+<tr>
+<td class="pair-col">Computer Science vs Biology</td>
+<td class="num-col">0.665</td><td class="num-col">0.518</td><td class="num-col" style="color:#c0392b;font-weight:600">11%</td><td class="bar-col"><div class="frac-bar" style="width:11.203807230297318%;background:#c0392b"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Computer Science</td>
+</tr>
+<tr>
+<td class="pair-col">Art vs Engineering</td>
+<td class="num-col">0.659</td><td class="num-col">0.676</td><td class="num-col" style="color:#2d7d46;font-weight:600">111%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td class="num-col">0.665</td><td class="num-col">0.658</td><td class="num-col" style="color:#2d7d46;font-weight:600">96%</td><td class="bar-col"><div class="frac-bar" style="width:95.93247829412367%;background:#2d7d46"></div></td>
+<td>Engineering</td>
+</tr>
+<tr>
+<td class="pair-col">Business vs Art</td>
+<td class="num-col">0.656</td><td class="num-col">0.701</td><td class="num-col" style="color:#2d7d46;font-weight:600">129%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td class="num-col">0.665</td><td class="num-col">0.659</td><td class="num-col" style="color:#2d7d46;font-weight:600">96%</td><td class="bar-col"><div class="frac-bar" style="width:96.13936113481368%;background:#2d7d46"></div></td>
+<td>Business</td>
+</tr>
+<tr>
+<td class="pair-col">English vs Engineering</td>
+<td class="num-col">0.672</td><td class="num-col">0.639</td><td class="num-col" style="color:#2d7d46;font-weight:600">81%</td><td class="bar-col"><div class="frac-bar" style="width:80.96163580490676%;background:#2d7d46"></div></td>
+<td class="num-col">0.648</td><td class="num-col">0.677</td><td class="num-col" style="color:#2d7d46;font-weight:600">119%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td>Engineering</td>
+</tr>
+<tr>
+<td class="pair-col">Art vs Nursing</td>
+<td class="num-col">0.641</td><td class="num-col">0.736</td><td class="num-col" style="color:#2d7d46;font-weight:600">167%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td class="num-col">0.677</td><td class="num-col">0.683</td><td class="num-col" style="color:#2d7d46;font-weight:600">103%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td>Nursing</td>
+</tr>
+<tr>
+<td class="pair-col">Engineering vs Law</td>
+<td class="num-col">0.641</td><td class="num-col">0.571</td><td class="num-col" style="color:#1a6fb5;font-weight:600">50%</td><td class="bar-col"><div class="frac-bar" style="width:50.21051008123455%;background:#1a6fb5"></div></td>
+<td class="num-col">0.672</td><td class="num-col">0.568</td><td class="num-col" style="color:#b5891a;font-weight:600">40%</td><td class="bar-col"><div class="frac-bar" style="width:39.75603275818959%;background:#b5891a"></div></td>
+<td>Engineering</td>
+</tr>
+<tr>
+<td class="pair-col">Nursing vs Psychology</td>
+<td class="num-col">0.657</td><td class="num-col">0.586</td><td class="num-col" style="color:#1a6fb5;font-weight:600">54%</td><td class="bar-col"><div class="frac-bar" style="width:54.468553404891985%;background:#1a6fb5"></div></td>
+<td class="num-col">0.653</td><td class="num-col">0.589</td><td class="num-col" style="color:#1a6fb5;font-weight:600">58%</td><td class="bar-col"><div class="frac-bar" style="width:57.865631683521755%;background:#1a6fb5"></div></td>
+<td>Nursing</td>
+</tr>
+<tr>
+<td class="pair-col">Music vs Mathematics</td>
+<td class="num-col">0.669</td><td class="num-col">0.531</td><td class="num-col" style="color:#c0392b;font-weight:600">19%</td><td class="bar-col"><div class="frac-bar" style="width:18.537564650255405%;background:#c0392b"></div></td>
+<td class="num-col">0.639</td><td class="num-col">0.585</td><td class="num-col" style="color:#1a6fb5;font-weight:600">61%</td><td class="bar-col"><div class="frac-bar" style="width:61.0737149046282%;background:#1a6fb5"></div></td>
+<td>Mathematics</td>
+</tr>
+<tr>
+<td class="pair-col">Economics vs English</td>
+<td class="num-col">0.667</td><td class="num-col">0.613</td><td class="num-col" style="color:#1a6fb5;font-weight:600">68%</td><td class="bar-col"><div class="frac-bar" style="width:67.72606676601714%;background:#1a6fb5"></div></td>
+<td class="num-col">0.641</td><td class="num-col">0.627</td><td class="num-col" style="color:#2d7d46;font-weight:600">90%</td><td class="bar-col"><div class="frac-bar" style="width:89.9306556653099%;background:#2d7d46"></div></td>
+<td>Economics</td>
+</tr>
+<tr>
+<td class="pair-col">English vs Law</td>
+<td class="num-col">0.671</td><td class="num-col">0.551</td><td class="num-col" style="color:#b5891a;font-weight:600">30%</td><td class="bar-col"><div class="frac-bar" style="width:29.65303607152125%;background:#b5891a"></div></td>
+<td class="num-col">0.636</td><td class="num-col">0.602</td><td class="num-col" style="color:#1a6fb5;font-weight:600">75%</td><td class="bar-col"><div class="frac-bar" style="width:75.33310991602681%;background:#1a6fb5"></div></td>
+<td>Law</td>
+</tr>
+<tr>
+<td class="pair-col">Computer Science vs History</td>
+<td class="num-col">0.651</td><td class="num-col">0.548</td><td class="num-col" style="color:#b5891a;font-weight:600">32%</td><td class="bar-col"><div class="frac-bar" style="width:31.53579312519713%;background:#b5891a"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Computer Science</td>
+</tr>
+<tr>
+<td class="pair-col">Engineering vs Mathematics</td>
+<td class="num-col">0.653</td><td class="num-col">0.564</td><td class="num-col" style="color:#b5891a;font-weight:600">42%</td><td class="bar-col"><div class="frac-bar" style="width:41.89911964018439%;background:#b5891a"></div></td>
+<td class="num-col">0.642</td><td class="num-col">0.528</td><td class="num-col" style="color:#c0392b;font-weight:600">20%</td><td class="bar-col"><div class="frac-bar" style="width:19.56331278853058%;background:#c0392b"></div></td>
+<td>Engineering</td>
+</tr>
+<tr>
+<td class="pair-col">Music vs Engineering</td>
+<td class="num-col">0.631</td><td class="num-col">0.597</td><td class="num-col" style="color:#1a6fb5;font-weight:600">74%</td><td class="bar-col"><div class="frac-bar" style="width:74.09454775419573%;background:#1a6fb5"></div></td>
+<td class="num-col">0.663</td><td class="num-col">0.625</td><td class="num-col" style="color:#1a6fb5;font-weight:600">76%</td><td class="bar-col"><div class="frac-bar" style="width:76.44118542282217%;background:#1a6fb5"></div></td>
+<td>Engineering</td>
+</tr>
+<tr>
+<td class="pair-col">Computer Science vs Political Science</td>
+<td class="num-col">0.646</td><td class="num-col">0.527</td><td class="num-col" style="color:#c0392b;font-weight:600">18%</td><td class="bar-col"><div class="frac-bar" style="width:18.45351432243822%;background:#c0392b"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Political Science</td>
+</tr>
+<tr>
+<td class="pair-col">Sociology vs Nursing</td>
+<td class="num-col">0.656</td><td class="num-col">0.617</td><td class="num-col" style="color:#1a6fb5;font-weight:600">75%</td><td class="bar-col"><div class="frac-bar" style="width:75.2485779223746%;background:#1a6fb5"></div></td>
+<td class="num-col">0.633</td><td class="num-col">0.594</td><td class="num-col" style="color:#1a6fb5;font-weight:600">71%</td><td class="bar-col"><div class="frac-bar" style="width:70.57839150958607%;background:#1a6fb5"></div></td>
+<td>Nursing</td>
+</tr>
+<tr>
+<td class="pair-col">Art vs Law</td>
+<td class="num-col">0.652</td><td class="num-col">0.584</td><td class="num-col" style="color:#1a6fb5;font-weight:600">55%</td><td class="bar-col"><div class="frac-bar" style="width:55.31073507650339%;background:#1a6fb5"></div></td>
+<td class="num-col">0.634</td><td class="num-col">0.582</td><td class="num-col" style="color:#1a6fb5;font-weight:600">62%</td><td class="bar-col"><div class="frac-bar" style="width:61.52490842804327%;background:#1a6fb5"></div></td>
+<td>Law</td>
+</tr>
+<tr>
+<td class="pair-col">Economics vs Music</td>
+<td class="num-col">0.648</td><td class="num-col">0.570</td><td class="num-col" style="color:#b5891a;font-weight:600">47%</td><td class="bar-col"><div class="frac-bar" style="width:47.15745306226059%;background:#b5891a"></div></td>
+<td class="num-col">0.637</td><td class="num-col">0.573</td><td class="num-col" style="color:#1a6fb5;font-weight:600">53%</td><td class="bar-col"><div class="frac-bar" style="width:53.10872421529771%;background:#1a6fb5"></div></td>
+<td>Economics</td>
+</tr>
+<tr>
+<td class="pair-col">Computer Science vs Business</td>
+<td class="num-col">0.637</td><td class="num-col">0.563</td><td class="num-col" style="color:#b5891a;font-weight:600">46%</td><td class="bar-col"><div class="frac-bar" style="width:46.07086117905126%;background:#b5891a"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Business</td>
+</tr>
+<tr>
+<td class="pair-col">Biology vs Nursing</td>
+<td class="num-col">0.632</td><td class="num-col">0.635</td><td class="num-col" style="color:#2d7d46;font-weight:600">102%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td class="num-col">0.641</td><td class="num-col">0.591</td><td class="num-col" style="color:#1a6fb5;font-weight:600">65%</td><td class="bar-col"><div class="frac-bar" style="width:64.81527141485066%;background:#1a6fb5"></div></td>
+<td>Nursing</td>
+</tr>
+<tr>
+<td class="pair-col">Economics vs Art</td>
+<td class="num-col">0.632</td><td class="num-col">0.652</td><td class="num-col" style="color:#2d7d46;font-weight:600">115%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td class="num-col">0.633</td><td class="num-col">0.602</td><td class="num-col" style="color:#1a6fb5;font-weight:600">77%</td><td class="bar-col"><div class="frac-bar" style="width:76.82269642939822%;background:#1a6fb5"></div></td>
+<td>Economics</td>
+</tr>
+<tr>
+<td class="pair-col">Business vs Law</td>
+<td class="num-col">0.600</td><td class="num-col">0.603</td><td class="num-col" style="color:#2d7d46;font-weight:600">103%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td class="num-col">0.661</td><td class="num-col">0.571</td><td class="num-col" style="color:#b5891a;font-weight:600">44%</td><td class="bar-col"><div class="frac-bar" style="width:44.36979786265262%;background:#b5891a"></div></td>
+<td>Business</td>
+</tr>
+<tr>
+<td class="pair-col">Sociology vs Engineering</td>
+<td class="num-col">0.626</td><td class="num-col">0.539</td><td class="num-col" style="color:#b5891a;font-weight:600">31%</td><td class="bar-col"><div class="frac-bar" style="width:30.944687158726335%;background:#b5891a"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Engineering</td>
+</tr>
+<tr>
+<td class="pair-col">Physics vs Political Science</td>
+<td class="num-col">0.640</td><td class="num-col">0.558</td><td class="num-col" style="color:#b5891a;font-weight:600">41%</td><td class="bar-col"><div class="frac-bar" style="width:41.410965031291354%;background:#b5891a"></div></td>
+<td class="num-col">0.606</td><td class="num-col">0.495</td><td class="num-col" style="color:#c0392b;font-weight:600">-5%</td><td class="bar-col"><div class="frac-bar" style="width:0%;background:#c0392b"></div></td>
+<td>Political Science</td>
+</tr>
+<tr>
+<td class="pair-col">Biology vs Physics</td>
+<td class="num-col">0.649</td><td class="num-col">0.495</td><td class="num-col" style="color:#c0392b;font-weight:600">-3%</td><td class="bar-col"><div class="frac-bar" style="width:0%;background:#c0392b"></div></td>
+<td class="num-col">0.595</td><td class="num-col">0.481</td><td class="num-col" style="color:#c0392b;font-weight:600">-20%</td><td class="bar-col"><div class="frac-bar" style="width:0%;background:#c0392b"></div></td>
+<td>Biology</td>
+</tr>
+<tr>
+<td class="pair-col">Computer Science vs Mathematics</td>
+<td class="num-col">0.622</td><td class="num-col">0.526</td><td class="num-col" style="color:#b5891a;font-weight:600">22%</td><td class="bar-col"><div class="frac-bar" style="width:21.690776867653433%;background:#b5891a"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Computer Science</td>
+</tr>
+<tr>
+<td class="pair-col">Business vs Nursing</td>
+<td class="num-col">0.601</td><td class="num-col">0.547</td><td class="num-col" style="color:#b5891a;font-weight:600">47%</td><td class="bar-col"><div class="frac-bar" style="width:46.56432634376433%;background:#b5891a"></div></td>
+<td class="num-col">0.641</td><td class="num-col">0.530</td><td class="num-col" style="color:#b5891a;font-weight:600">21%</td><td class="bar-col"><div class="frac-bar" style="width:21.33461163121868%;background:#b5891a"></div></td>
+<td>Nursing</td>
+</tr>
+<tr>
+<td class="pair-col">Business vs Biology</td>
+<td class="num-col">0.609</td><td class="num-col">0.587</td><td class="num-col" style="color:#2d7d46;font-weight:600">80%</td><td class="bar-col"><div class="frac-bar" style="width:80.21080663762432%;background:#2d7d46"></div></td>
+<td class="num-col">0.631</td><td class="num-col">0.561</td><td class="num-col" style="color:#b5891a;font-weight:600">46%</td><td class="bar-col"><div class="frac-bar" style="width:46.295851496095445%;background:#b5891a"></div></td>
+<td>Business</td>
+</tr>
+<tr>
+<td class="pair-col">Economics vs Engineering</td>
+<td class="num-col">0.617</td><td class="num-col">0.529</td><td class="num-col" style="color:#b5891a;font-weight:600">25%</td><td class="bar-col"><div class="frac-bar" style="width:24.62689411516572%;background:#b5891a"></div></td>
+<td class="num-col">0.617</td><td class="num-col">0.536</td><td class="num-col" style="color:#b5891a;font-weight:600">31%</td><td class="bar-col"><div class="frac-bar" style="width:31.033106596518%;background:#b5891a"></div></td>
+<td>Engineering</td>
+</tr>
+<tr>
+<td class="pair-col">Sociology vs Music</td>
+<td class="num-col">0.599</td><td class="num-col">0.556</td><td class="num-col" style="color:#1a6fb5;font-weight:600">56%</td><td class="bar-col"><div class="frac-bar" style="width:56.289059247543975%;background:#1a6fb5"></div></td>
+<td class="num-col">0.634</td><td class="num-col">0.553</td><td class="num-col" style="color:#b5891a;font-weight:600">39%</td><td class="bar-col"><div class="frac-bar" style="width:39.3567420943316%;background:#b5891a"></div></td>
+<td>Sociology</td>
+</tr>
+<tr>
+<td class="pair-col">Physics vs History</td>
+<td class="num-col">0.644</td><td class="num-col">0.519</td><td class="num-col" style="color:#c0392b;font-weight:600">14%</td><td class="bar-col"><div class="frac-bar" style="width:13.538336172761747%;background:#c0392b"></div></td>
+<td class="num-col">0.585</td><td class="num-col">0.571</td><td class="num-col" style="color:#2d7d46;font-weight:600">83%</td><td class="bar-col"><div class="frac-bar" style="width:83.49263036602063%;background:#2d7d46"></div></td>
+<td>Physics</td>
+</tr>
+<tr>
+<td class="pair-col">Music vs Psychology</td>
+<td class="num-col">0.589</td><td class="num-col">0.589</td><td class="num-col" style="color:#2d7d46;font-weight:600">100%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td class="num-col">0.639</td><td class="num-col">0.569</td><td class="num-col" style="color:#b5891a;font-weight:600">49%</td><td class="bar-col"><div class="frac-bar" style="width:49.30896518105221%;background:#b5891a"></div></td>
+<td>Psychology</td>
+</tr>
+<tr>
+<td class="pair-col">Music vs History</td>
+<td class="num-col">0.600</td><td class="num-col">0.512</td><td class="num-col" style="color:#c0392b;font-weight:600">12%</td><td class="bar-col"><div class="frac-bar" style="width:11.933964924152777%;background:#c0392b"></div></td>
+<td class="num-col">0.625</td><td class="num-col">0.467</td><td class="num-col" style="color:#c0392b;font-weight:600">-26%</td><td class="bar-col"><div class="frac-bar" style="width:0%;background:#c0392b"></div></td>
+<td>History</td>
+</tr>
+<tr>
+<td class="pair-col">Music vs Political Science</td>
+<td class="num-col">0.594</td><td class="num-col">0.594</td><td class="num-col" style="color:#2d7d46;font-weight:600">100%</td><td class="bar-col"><div class="frac-bar" style="width:99.97766053314785%;background:#2d7d46"></div></td>
+<td class="num-col">0.630</td><td class="num-col">0.579</td><td class="num-col" style="color:#1a6fb5;font-weight:600">60%</td><td class="bar-col"><div class="frac-bar" style="width:60.43197380916674%;background:#1a6fb5"></div></td>
+<td>Political Science</td>
+</tr>
+<tr>
+<td class="pair-col">Sociology vs Computer Science</td>
+<td class="num-col">0.612</td><td class="num-col">0.480</td><td class="num-col" style="color:#c0392b;font-weight:600">-18%</td><td class="bar-col"><div class="frac-bar" style="width:0%;background:#c0392b"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Computer Science</td>
+</tr>
+<tr>
+<td class="pair-col">Business vs Mathematics</td>
+<td class="num-col">0.626</td><td class="num-col">0.598</td><td class="num-col" style="color:#1a6fb5;font-weight:600">78%</td><td class="bar-col"><div class="frac-bar" style="width:78.04677155560084%;background:#1a6fb5"></div></td>
+<td class="num-col">0.594</td><td class="num-col">0.532</td><td class="num-col" style="color:#b5891a;font-weight:600">34%</td><td class="bar-col"><div class="frac-bar" style="width:33.72569594943998%;background:#b5891a"></div></td>
+<td>Business</td>
+</tr>
+<tr>
+<td class="pair-col">History vs Law</td>
+<td class="num-col">0.610</td><td class="num-col">0.456</td><td class="num-col" style="color:#c0392b;font-weight:600">-40%</td><td class="bar-col"><div class="frac-bar" style="width:0%;background:#c0392b"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>History</td>
+</tr>
+<tr>
+<td class="pair-col">Economics vs Biology</td>
+<td class="num-col">0.616</td><td class="num-col">0.521</td><td class="num-col" style="color:#c0392b;font-weight:600">18%</td><td class="bar-col"><div class="frac-bar" style="width:18.313204591640254%;background:#c0392b"></div></td>
+<td class="num-col">0.602</td><td class="num-col">0.507</td><td class="num-col" style="color:#c0392b;font-weight:600">7%</td><td class="bar-col"><div class="frac-bar" style="width:7.338141907037954%;background:#c0392b"></div></td>
+<td>Economics</td>
+</tr>
+<tr>
+<td class="pair-col">Engineering vs Psychology</td>
+<td class="num-col">0.607</td><td class="num-col">0.496</td><td class="num-col" style="color:#c0392b;font-weight:600">-4%</td><td class="bar-col"><div class="frac-bar" style="width:0%;background:#c0392b"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Engineering</td>
+</tr>
+<tr>
+<td class="pair-col">Business vs History</td>
+<td class="num-col">0.590</td><td class="num-col">0.614</td><td class="num-col" style="color:#2d7d46;font-weight:600">127%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td class="num-col">0.623</td><td class="num-col">0.623</td><td class="num-col" style="color:#2d7d46;font-weight:600">100%</td><td class="bar-col"><div class="frac-bar" style="width:99.79500791857573%;background:#2d7d46"></div></td>
+<td>Business</td>
+</tr>
+<tr>
+<td class="pair-col">Nursing vs Political Science</td>
+<td class="num-col">0.590</td><td class="num-col">0.582</td><td class="num-col" style="color:#2d7d46;font-weight:600">91%</td><td class="bar-col"><div class="frac-bar" style="width:90.73467807230621%;background:#2d7d46"></div></td>
+<td class="num-col">0.622</td><td class="num-col">0.572</td><td class="num-col" style="color:#1a6fb5;font-weight:600">59%</td><td class="bar-col"><div class="frac-bar" style="width:58.9634255081861%;background:#1a6fb5"></div></td>
+<td>Nursing</td>
+</tr>
+<tr>
+<td class="pair-col">Art vs Mathematics</td>
+<td class="num-col">0.618</td><td class="num-col">0.616</td><td class="num-col" style="color:#2d7d46;font-weight:600">99%</td><td class="bar-col"><div class="frac-bar" style="width:98.6746985463303%;background:#2d7d46"></div></td>
+<td class="num-col">0.594</td><td class="num-col">0.620</td><td class="num-col" style="color:#2d7d46;font-weight:600">128%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td>Mathematics</td>
+</tr>
+<tr>
+<td class="pair-col">English vs Psychology</td>
+<td class="num-col">0.627</td><td class="num-col">0.628</td><td class="num-col" style="color:#2d7d46;font-weight:600">101%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td class="num-col">0.584</td><td class="num-col">0.624</td><td class="num-col" style="color:#2d7d46;font-weight:600">147%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td>Psychology</td>
+</tr>
+<tr>
+<td class="pair-col">Physics vs Mathematics</td>
+<td class="num-col">0.605</td><td class="num-col">0.490</td><td class="num-col" style="color:#c0392b;font-weight:600">-10%</td><td class="bar-col"><div class="frac-bar" style="width:0%;background:#c0392b"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Physics</td>
+</tr>
+<tr>
+<td class="pair-col">Economics vs Law</td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td class="num-col">0.605</td><td class="num-col">0.519</td><td class="num-col" style="color:#c0392b;font-weight:600">19%</td><td class="bar-col"><div class="frac-bar" style="width:18.52757845908543%;background:#c0392b"></div></td>
+<td>Economics</td>
+</tr>
+<tr>
+<td class="pair-col">Engineering vs History</td>
+<td class="num-col">0.590</td><td class="num-col">0.583</td><td class="num-col" style="color:#2d7d46;font-weight:600">92%</td><td class="bar-col"><div class="frac-bar" style="width:92.17218043580189%;background:#2d7d46"></div></td>
+<td class="num-col">0.616</td><td class="num-col">0.620</td><td class="num-col" style="color:#2d7d46;font-weight:600">104%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td>Engineering</td>
+</tr>
+<tr>
+<td class="pair-col">Political Science vs Law</td>
+<td class="num-col">0.600</td><td class="num-col">0.568</td><td class="num-col" style="color:#1a6fb5;font-weight:600">68%</td><td class="bar-col"><div class="frac-bar" style="width:67.7346591170649%;background:#1a6fb5"></div></td>
+<td class="num-col">0.606</td><td class="num-col">0.520</td><td class="num-col" style="color:#c0392b;font-weight:600">19%</td><td class="bar-col"><div class="frac-bar" style="width:19.251452218728087%;background:#c0392b"></div></td>
+<td>Political Science</td>
+</tr>
+<tr>
+<td class="pair-col">Biology vs Engineering</td>
+<td class="num-col">0.609</td><td class="num-col">0.555</td><td class="num-col" style="color:#1a6fb5;font-weight:600">50%</td><td class="bar-col"><div class="frac-bar" style="width:50.27259911663891%;background:#1a6fb5"></div></td>
+<td class="num-col">0.591</td><td class="num-col">0.563</td><td class="num-col" style="color:#1a6fb5;font-weight:600">69%</td><td class="bar-col"><div class="frac-bar" style="width:68.80073219263987%;background:#1a6fb5"></div></td>
+<td>Engineering</td>
+</tr>
+<tr>
+<td class="pair-col">Business vs Physics</td>
+<td class="num-col">0.598</td><td class="num-col">0.596</td><td class="num-col" style="color:#2d7d46;font-weight:600">98%</td><td class="bar-col"><div class="frac-bar" style="width:97.8558929092913%;background:#2d7d46"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Business</td>
+</tr>
+<tr>
+<td class="pair-col">Economics vs Psychology</td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td class="num-col">0.598</td><td class="num-col">0.492</td><td class="num-col" style="color:#c0392b;font-weight:600">-8%</td><td class="bar-col"><div class="frac-bar" style="width:0%;background:#c0392b"></div></td>
+<td>Economics</td>
+</tr>
+<tr>
+<td class="pair-col">English vs Mathematics</td>
+<td class="num-col">0.616</td><td class="num-col">0.578</td><td class="num-col" style="color:#1a6fb5;font-weight:600">68%</td><td class="bar-col"><div class="frac-bar" style="width:67.63107844636444%;background:#1a6fb5"></div></td>
+<td class="num-col">0.573</td><td class="num-col">0.640</td><td class="num-col" style="color:#2d7d46;font-weight:600">191%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td>Mathematics</td>
+</tr>
+<tr>
+<td class="pair-col">Art vs Psychology</td>
+<td class="num-col">0.586</td><td class="num-col">0.664</td><td class="num-col" style="color:#2d7d46;font-weight:600">190%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td class="num-col">0.594</td><td class="num-col">0.603</td><td class="num-col" style="color:#2d7d46;font-weight:600">110%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td>Psychology</td>
+</tr>
+<tr>
+<td class="pair-col">Biology vs Law</td>
+<td class="num-col">0.594</td><td class="num-col">0.516</td><td class="num-col" style="color:#c0392b;font-weight:600">17%</td><td class="bar-col"><div class="frac-bar" style="width:16.738744792852167%;background:#c0392b"></div></td>
+<td class="num-col">0.584</td><td class="num-col">0.503</td><td class="num-col" style="color:#c0392b;font-weight:600">3%</td><td class="bar-col"><div class="frac-bar" style="width:3.3727433281004275%;background:#c0392b"></div></td>
+<td>Biology</td>
+</tr>
+<tr>
+<td class="pair-col">Nursing vs Engineering</td>
+<td class="num-col">0.588</td><td class="num-col">0.583</td><td class="num-col" style="color:#2d7d46;font-weight:600">94%</td><td class="bar-col"><div class="frac-bar" style="width:93.75211534556291%;background:#2d7d46"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Nursing</td>
+</tr>
+<tr>
+<td class="pair-col">Biology vs Political Science</td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td class="num-col">0.588</td><td class="num-col">0.517</td><td class="num-col" style="color:#c0392b;font-weight:600">20%</td><td class="bar-col"><div class="frac-bar" style="width:19.517519517519496%;background:#c0392b"></div></td>
+<td>Political Science</td>
+</tr>
+<tr>
+<td class="pair-col">Political Science vs Mathematics</td>
+<td class="num-col">0.587</td><td class="num-col">0.564</td><td class="num-col" style="color:#1a6fb5;font-weight:600">74%</td><td class="bar-col"><div class="frac-bar" style="width:73.50637558648462%;background:#1a6fb5"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Political Science</td>
+</tr>
+<tr>
+<td class="pair-col">Psychology vs Law</td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td class="num-col">0.586</td><td class="num-col">0.502</td><td class="num-col" style="color:#c0392b;font-weight:600">3%</td><td class="bar-col"><div class="frac-bar" style="width:2.682747133064307%;background:#c0392b"></div></td>
+<td>Psychology</td>
+</tr>
+<tr>
+<td class="pair-col">Sociology vs Law</td>
+<td class="num-col">0.586</td><td class="num-col">0.533</td><td class="num-col" style="color:#b5891a;font-weight:600">38%</td><td class="bar-col"><div class="frac-bar" style="width:38.217596357131214%;background:#b5891a"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Sociology</td>
+</tr>
+<tr>
+<td class="pair-col">Economics vs Political Science</td>
+<td class="num-col">0.584</td><td class="num-col">0.525</td><td class="num-col" style="color:#b5891a;font-weight:600">30%</td><td class="bar-col"><div class="frac-bar" style="width:29.782079119678173%;background:#b5891a"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Political Science</td>
+</tr>
+<tr>
+<td class="pair-col">Engineering vs Political Science</td>
+<td class="num-col">0.582</td><td class="num-col">0.479</td><td class="num-col" style="color:#c0392b;font-weight:600">-25%</td><td class="bar-col"><div class="frac-bar" style="width:0%;background:#c0392b"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Engineering</td>
+</tr>
+<tr>
+<td class="pair-col">English vs Political Science</td>
+<td class="num-col">0.581</td><td class="num-col">0.634</td><td class="num-col" style="color:#2d7d46;font-weight:600">166%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td class="num-col">0.582</td><td class="num-col">0.636</td><td class="num-col" style="color:#2d7d46;font-weight:600">166%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td>Political Science</td>
+</tr>
+<tr>
+<td class="pair-col">Art vs Music</td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td class="num-col">0.581</td><td class="num-col">0.529</td><td class="num-col" style="color:#b5891a;font-weight:600">36%</td><td class="bar-col"><div class="frac-bar" style="width:35.98256410460212%;background:#b5891a"></div></td>
+<td>Music</td>
+</tr>
+<tr>
+<td class="pair-col">Computer Science vs Psychology</td>
+<td class="num-col">0.579</td><td class="num-col">0.525</td><td class="num-col" style="color:#b5891a;font-weight:600">31%</td><td class="bar-col"><div class="frac-bar" style="width:31.415597412046047%;background:#b5891a"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Psychology</td>
+</tr>
+<tr>
+<td class="pair-col">Sociology vs Art</td>
+<td class="num-col">0.584</td><td class="num-col">0.632</td><td class="num-col" style="color:#2d7d46;font-weight:600">157%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td class="num-col">0.573</td><td class="num-col">0.588</td><td class="num-col" style="color:#2d7d46;font-weight:600">120%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td>Sociology</td>
+</tr>
+<tr>
+<td class="pair-col">English vs Music</td>
+<td class="num-col">0.579</td><td class="num-col">0.540</td><td class="num-col" style="color:#1a6fb5;font-weight:600">51%</td><td class="bar-col"><div class="frac-bar" style="width:50.53920903194643%;background:#1a6fb5"></div></td>
+<td class="num-col">0.576</td><td class="num-col">0.553</td><td class="num-col" style="color:#1a6fb5;font-weight:600">69%</td><td class="bar-col"><div class="frac-bar" style="width:69.35998562996552%;background:#1a6fb5"></div></td>
+<td>Music</td>
+</tr>
+<tr>
+<td class="pair-col">Economics vs History</td>
+<td class="num-col">0.568</td><td class="num-col">0.554</td><td class="num-col" style="color:#1a6fb5;font-weight:600">79%</td><td class="bar-col"><div class="frac-bar" style="width:79.14045486317343%;background:#1a6fb5"></div></td>
+<td class="num-col">0.586</td><td class="num-col">0.571</td><td class="num-col" style="color:#2d7d46;font-weight:600">82%</td><td class="bar-col"><div class="frac-bar" style="width:82.14919286523399%;background:#2d7d46"></div></td>
+<td>Economics</td>
+</tr>
+<tr>
+<td class="pair-col">Business vs Psychology</td>
+<td class="num-col">0.561</td><td class="num-col">0.538</td><td class="num-col" style="color:#1a6fb5;font-weight:600">62%</td><td class="bar-col"><div class="frac-bar" style="width:61.797676949262396%;background:#1a6fb5"></div></td>
+<td class="num-col">0.589</td><td class="num-col">0.557</td><td class="num-col" style="color:#1a6fb5;font-weight:600">64%</td><td class="bar-col"><div class="frac-bar" style="width:64.0424145483718%;background:#1a6fb5"></div></td>
+<td>Business</td>
+</tr>
+<tr>
+<td class="pair-col">Economics vs Business</td>
+<td class="num-col">0.575</td><td class="num-col">0.566</td><td class="num-col" style="color:#2d7d46;font-weight:600">88%</td><td class="bar-col"><div class="frac-bar" style="width:88.43386299146817%;background:#2d7d46"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Business</td>
+</tr>
+<tr>
+<td class="pair-col">Economics vs Mathematics</td>
+<td class="num-col">0.575</td><td class="num-col">0.532</td><td class="num-col" style="color:#b5891a;font-weight:600">42%</td><td class="bar-col"><div class="frac-bar" style="width:42.333285461247584%;background:#b5891a"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Economics</td>
+</tr>
+<tr>
+<td class="pair-col">Biology vs Mathematics</td>
+<td class="num-col">0.574</td><td class="num-col">0.501</td><td class="num-col" style="color:#c0392b;font-weight:600">1%</td><td class="bar-col"><div class="frac-bar" style="width:0.9559529427080086%;background:#c0392b"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Biology</td>
+</tr>
+<tr>
+<td class="pair-col">History vs Mathematics</td>
+<td class="num-col">0.571</td><td class="num-col">0.512</td><td class="num-col" style="color:#c0392b;font-weight:600">17%</td><td class="bar-col"><div class="frac-bar" style="width:17.457180500658783%;background:#c0392b"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Mathematics</td>
+</tr>
+<tr>
+<td class="pair-col">Economics vs Computer Science</td>
+<td class="num-col">0.571</td><td class="num-col">0.473</td><td class="num-col" style="color:#c0392b;font-weight:600">-37%</td><td class="bar-col"><div class="frac-bar" style="width:0%;background:#c0392b"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Economics</td>
+</tr>
+<tr>
+<td class="pair-col">Sociology vs Mathematics</td>
+<td class="num-col">0.571</td><td class="num-col">0.523</td><td class="num-col" style="color:#b5891a;font-weight:600">33%</td><td class="bar-col"><div class="frac-bar" style="width:32.82152217084126%;background:#b5891a"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Sociology</td>
+</tr>
+<tr>
+<td class="pair-col">Sociology vs Physics</td>
+<td class="num-col">0.571</td><td class="num-col">0.509</td><td class="num-col" style="color:#c0392b;font-weight:600">12%</td><td class="bar-col"><div class="frac-bar" style="width:11.986854385117416%;background:#c0392b"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Sociology</td>
+</tr>
+<tr>
+<td class="pair-col">Art vs Biology</td>
+<td class="num-col">0.571</td><td class="num-col">0.623</td><td class="num-col" style="color:#2d7d46;font-weight:600">173%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Biology</td>
+</tr>
+<tr>
+<td class="pair-col">English vs Biology</td>
+<td class="num-col">0.567</td><td class="num-col">0.585</td><td class="num-col" style="color:#2d7d46;font-weight:600">128%</td><td class="bar-col"><div class="frac-bar" style="width:100%;background:#2d7d46"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Biology</td>
+</tr>
+<tr>
+<td class="pair-col">Music vs Biology</td>
+<td class="num-col">0.557</td><td class="num-col">0.542</td><td class="num-col" style="color:#1a6fb5;font-weight:600">74%</td><td class="bar-col"><div class="frac-bar" style="width:73.73873134662354%;background:#1a6fb5"></div></td>
+<td class="num-col">0.571</td><td class="num-col">0.554</td><td class="num-col" style="color:#1a6fb5;font-weight:600">76%</td><td class="bar-col"><div class="frac-bar" style="width:75.5055147197476%;background:#1a6fb5"></div></td>
+<td>Biology</td>
+</tr>
+<tr>
+<td class="pair-col">Computer Science vs Physics</td>
+<td class="num-col">0.561</td><td class="num-col">0.523</td><td class="num-col" style="color:#b5891a;font-weight:600">38%</td><td class="bar-col"><div class="frac-bar" style="width:38.18050710049057%;background:#b5891a"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Computer Science</td>
+</tr>
+<tr>
+<td class="pair-col">Economics vs Physics</td>
+<td class="num-col">0.561</td><td class="num-col">0.532</td><td class="num-col" style="color:#1a6fb5;font-weight:600">53%</td><td class="bar-col"><div class="frac-bar" style="width:52.74687218929911%;background:#1a6fb5"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Economics</td>
+</tr>
+<tr>
+<td class="pair-col">Business vs Engineering</td>
+<td class="num-col">0.560</td><td class="num-col">0.531</td><td class="num-col" style="color:#1a6fb5;font-weight:600">52%</td><td class="bar-col"><div class="frac-bar" style="width:51.99752740960272%;background:#1a6fb5"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Business</td>
+</tr>
+<tr>
+<td class="pair-col">English vs History</td>
+<td class="num-col">0.558</td><td class="num-col">0.557</td><td class="num-col" style="color:#2d7d46;font-weight:600">99%</td><td class="bar-col"><div class="frac-bar" style="width:98.57266488706871%;background:#2d7d46"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>History</td>
+</tr>
+<tr>
+<td class="pair-col">Business vs Political Science</td>
+<td class="num-col">0.556</td><td class="num-col">0.533</td><td class="num-col" style="color:#1a6fb5;font-weight:600">59%</td><td class="bar-col"><div class="frac-bar" style="width:59.377175915542935%;background:#1a6fb5"></div></td>
+<td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td><td class="num-col dim">—</td>
+<td>Business</td>
+</tr>
+
+</tbody>
+</table>
+
+</body></html>
